@@ -10,7 +10,7 @@ RUN apk --update add openssl zip curl ca-certificates jq \
 && cat /etc/ssl/certs/*.pem > /etc/ssl/certs/ca-certificates.crt \
 && sed -i -r '/^#.+/d' /etc/ssl/certs/ca-certificates.crt \
 && rm -rf /var/cache/apk/* \
-&& mkdir -p /etc/consul/ssl /ui /data \
+&& mkdir -m 0775 -p /etc/consul/ssl /ui /data \
 && wget http://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip \
 && unzip consul_${CONSUL_VERSION}_linux_amd64.zip \
 && mv consul /bin/ \
