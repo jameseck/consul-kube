@@ -30,7 +30,7 @@ spec:
               value: "false"                            # to debug or not to debug
             - name: "CONSUL_SERVER_COUNT"
               value: "${CONSUL_COUNT}"                  # integer value for number of containers
-          image: 'YOUR_CONSUL_IMAGE_HERE'
+          image: jameseckersall/consul-kube
           resources:
             limits:
               cpu: ${CONSUL_CPU}                        # how much CPU are you giving the container
