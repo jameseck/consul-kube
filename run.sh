@@ -46,7 +46,7 @@ if [ -z ${ENVIRONMENT} ] || [ -z ${MASTER_TOKEN} ] || [ -z ${GOSSIP_KEY} ]; then
   exit 1
 fi
 
-LIST_IPS=`curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/pods | jq '.items[] | select(.status.containerStatuses[].name=="consul") | .status .podIP'`
+LIST_IPS=`curl -sSk https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/$NAMESPACE/pods -H "Authorization: Bearer $KUBE_TOKEN" | jq '.items[] | select(.status.containerStatuses[].name=="consul") | .status .podIP'`
 
 #basic test to see if we have ${CONSUL_SERVER_COUNT} number of containers alive
 VALUE='0'
@@ -54,7 +54,7 @@ VALUE='0'
 while [ $VALUE != ${CONSUL_SERVER_COUNT} ]; do
   echo "waiting 10s on all the consul containers to spin up"
   sleep 10
-  LIST_IPS=`curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/jetest/pods | jq '.items[] | select(.status.containerStatuses[].name=="consul") | .status .podIP'`
+  LIST_IPS=`curl -sSk https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/jetest/pods -H "Authorization: Bearer $KUBE_TOKEN" | jq '.items[] | select(.status.containerStatuses[].name=="consul") | .status .podIP'`
   echo "$LIST_IPS" | sed -e 's/$/,/' -e '$s/,//' > /tmp/tester
   VALUE=`cat /tmp/tester | wc -l`
 done
