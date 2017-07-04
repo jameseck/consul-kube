@@ -12,6 +12,7 @@ RUN \
   sed -i -r '/^#.+/d' /etc/ssl/certs/ca-certificates.crt && \
   rm -rf /var/cache/apk/* && \
   mkdir -m 0775 -p /etc/consul/ssl /ui /data && \
+  chmod 0775 /etc/consul -R && \
   wget http://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip && \
   unzip consul_${CONSUL_VERSION}_linux_amd64.zip && \
   mv consul /bin/ && \
