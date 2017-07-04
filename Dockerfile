@@ -12,7 +12,6 @@ RUN \
   sed -i -r '/^#.+/d' /etc/ssl/certs/ca-certificates.crt && \
   rm -rf /var/cache/apk/* && \
   mkdir -m 0775 -p /etc/consul/ssl /ui /data && \
-  chmod 0775 /etc/consul -R && \
   wget http://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip && \
   unzip consul_${CONSUL_VERSION}_linux_amd64.zip && \
   mv consul /bin/ && \
@@ -23,13 +22,15 @@ RUN \
   rm -f consul_${CONSUL_VERSION}_linux_amd64.zip
 
 COPY config.json /etc/consul/config.json
+COPY run.sh /usr/bin/run.sh
+
+RUN \
+  chmod +x /usr/bin/run.sh && \
+  chmod -R 0775 /etc/consul
 
 EXPOSE ${CONSUL_HTTP_PORT}
 EXPOSE ${CONSUL_HTTPS_PORT}
 EXPOSE ${CONSUL_DNS_PORT}
-
-COPY run.sh /usr/bin/run.sh
-RUN chmod +x /usr/bin/run.sh
 
 ENTRYPOINT ["/usr/bin/run.sh"]
 CMD []
